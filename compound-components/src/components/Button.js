@@ -1,10 +1,7 @@
 import React from "react"
+import { ChatConsumer } from "./Chat"
 
-const Button = ({ onClick }) => (
-  <button type="button" onClick={onClick}>
-    Send
-  </button>
-)
+const Button = () => <ChatConsumer>{({ add }) => <button onClick={add}>Send</button>}</ChatConsumer>
 
 Button.displayName = "Button"
 

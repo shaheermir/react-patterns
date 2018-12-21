@@ -1,6 +1,8 @@
 import React from "react"
 import styled from "styled-components"
 
+import { ChatConsumer } from "./Chat"
+
 const Timestamp = styled.span`
   display: inline-block;
   margin-right: 1.2em;
@@ -19,18 +21,22 @@ const MessageContainer = styled.div`
   margin: 10px 0;
 `
 
-const Messages = ({ messages }) => (
-  <div>
-    <h3>Messages</h3>
-    <div className="msg__list">
-      {messages.map((msg, i) => (
-        <MessageContainer key={i}>
-          <Timestamp>{msg.timestamp}</Timestamp>
-          <Text>{msg.text}</Text>
-        </MessageContainer>
-      ))}
-    </div>
-  </div>
+const Messages = () => (
+  <ChatConsumer>
+    {({ messages }) => (
+      <div>
+        <h3>Messages</h3>
+        <div className="msg__list">
+          {messages.map((msg, i) => (
+            <MessageContainer key={i}>
+              <Timestamp>{msg.timestamp}</Timestamp>
+              <Text>{msg.text}</Text>
+            </MessageContainer>
+          ))}
+        </div>
+      </div>
+    )}
+  </ChatConsumer>
 )
 
 Messages.displayName = "Messages"

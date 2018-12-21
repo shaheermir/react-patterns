@@ -1,17 +1,27 @@
-import React, { Component } from "react"
+import React, { Component, createContext } from "react"
 import Messages from "./Messages"
 import Input from "./Input"
 import Button from "./Button"
+
+const ChatContext = createContext()
+export const ChatProvider = ChatContext.Provider
+export const ChatConsumer = ({ children }) => (
+  <ChatContext.Consumer>
+    {context => {
+      if (!context) {
+        throw new Error(
+          "SubComponents of Chat must be rendered as children of Chat, and not outside it."
+        )
+      }
+      return children(context)
+    }}
+  </ChatContext.Consumer>
+)
 
 class Chat extends Component {
   static Messages = Messages
   static Input = Input
   static Button = Button
-
-  state = {
-    currentMessage: "",
-    messages: []
-  }
 
   updateCurrentMessage = event => {
     const { value } = event.target
@@ -19,6 +29,7 @@ class Chat extends Component {
   }
 
   add = () => {
+    console.log("hey")
     const { currentMessage } = this.state
 
     this.setState(prevState => ({
@@ -33,35 +44,22 @@ class Chat extends Component {
     }))
   }
 
+  /* state must be declared after ur funcs due to class properties ????  */
+  state = {
+    currentMessage: "",
+    messages: [],
+    add: this.add,
+    updateCurrentMessage: this.updateCurrentMessage
+  }
+
   render() {
-    const { updateCurrentMessage, add } = this
     const { children } = this.props
-    const { messages, currentMessage } = this.state
 
     return (
-      <div>
+      <ChatProvider value={this.state}>
         <h1>Chatrooom</h1>
-        {React.Children.map(children, child => {
-          if (child.type.displayName === "Messages") {
-            return React.cloneElement(child, { messages })
-          }
-
-          if (child.type.displayName === "Input") {
-            return React.cloneElement(child, {
-              value: currentMessage,
-              onChange: updateCurrentMessage
-            })
-          }
-
-          if (child.type.displayName === "Button") {
-            return React.cloneElement(child, {
-              onClick: add
-            })
-          }
-
-          return child
-        })}
-      </div>
+        {children}
+      </ChatProvider>
     )
   }
 }

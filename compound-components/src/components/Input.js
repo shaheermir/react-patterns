@@ -1,7 +1,13 @@
 import React from "react"
+import { ChatConsumer } from "./Chat"
 
-const Input = ({ value, onChange }) => <input type="text" value={value} onChange={onChange} />
-
+const Input = () => (
+  <ChatConsumer>
+    {({ currentMessage, updateCurrentMessage }) => (
+      <input type="text" value={currentMessage} onChange={updateCurrentMessage} />
+    )}
+  </ChatConsumer>
+)
 Input.displayName = "Input"
 
 export default Input
