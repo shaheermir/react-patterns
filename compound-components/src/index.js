@@ -5,7 +5,11 @@ import Chat from "./components/Chat"
 
 const App = () => (
   <div>
-    <Chat />
+    <Chat>
+      <Chat.Messages />
+      <Chat.Input />
+      <Chat.Button />
+    </Chat>
   </div>
 )
 
